@@ -1,4 +1,19 @@
 # job4j_grabber
 
-[![Build Status](https://travis-ci.com/swebdesigne/job4j_grabber.svg?branch=master)](https://travis-ci.com/swebdesigne/job4j_grabber)
-[![codecov](https://codecov.io/gh/swebdesigne/job4j_grabber/branch/master/graph/badge.svg?token=N9P2KOMUBX)](https://codecov.io/gh/swebdesigne/job4j_grabber)
+Описание прокета.
+Проект представляет собой парсер вакансий с сайта sql.ru по названию JAVA и записывает их в базу данных. Реализацияя сделана так, чтобы парсер проверял наличие обновлений через заданный промежуток времени.
+
+Особенности:
+
+1) Период запуска указывается в настройках - app.properties;
+2) Доступ к интерфейсу реализован через REST API;
+3) Приложение собирается в jar.
+
+Использованы технологии:
+
+1) java 8;
+2) postgresql14/jdbc;
+3) jacoco;
+4) maven.
+
+
