@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class SqlRuDateTimeParser implements DateTimeParser {
      private static final String FORMAT = "dd MM yy";
-     static final long MILLIS_IN_A_DAY = 1000*60*60*24;
+     static final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
      private static final Map<String, String> MONTHS = Map.ofEntries(
              Map.entry("янв", "01"),
              Map.entry("фев", "02"),
