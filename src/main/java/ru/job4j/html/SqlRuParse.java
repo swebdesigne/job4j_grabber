@@ -12,7 +12,11 @@ public class SqlRuParse {
         Document doc = Jsoup.connect("https://www.sql.ru/forum/job-offers").get();
         Elements row = doc.select(".forumTable").select("tr");
         for (Element td : row) {
-            System.out.println(td.child(5).text());
+            System.out.println(String.format("Name %s, link %s, data %s",
+                    td.child(1).children().text(),
+                    td.child(1).children().attr("href"),
+                    td.child(5).text()
+            ));
         }
     }
 }
