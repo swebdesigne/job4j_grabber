@@ -55,34 +55,32 @@ public class AlertRabbit {
         Properties properties = rabbit.getProperties();
         try (Connection connection = rabbit.init(properties)) {
             rabbit.create();
-            try {
-                List<Long> store = new ArrayList<>();
-                Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-                scheduler.start();
-                JobDataMap data = new JobDataMap();
-                data.put("store", connection);
-                JobDetail job = newJob(Rabbit.class)
-                        .usingJobData(data)
-                        .build();
-                SimpleScheduleBuilder times = simpleSchedule()
-                        .withIntervalInSeconds(
-                                Integer.parseInt(rabbit.getProperties().getProperty("rabbit.interval"))
-                        )
-                        .repeatForever();
-                Trigger trigger = newTrigger()
-                        .startNow()
-                        .withSchedule(times)
-                        .build();
-                scheduler.scheduleJob(job, trigger);
-                Thread.sleep(10000);
-                scheduler.shutdown();
-                System.out.println(store);
-            } catch (Exception se) {
-                se.printStackTrace();
-            }
+            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+            scheduler.start();
+            JobDataMap data = new JobDataMap();
+            data.put("store", connection);
+            JobDetail job = newJob(Rabbit.class)
+                    .usingJobData(data)
+                    .build();
+            SimpleScheduleBuilder times = simpleSchedule()
+                    .withIntervalInSeconds(
+                            Integer.parseInt(properties.getProperty("rabbit.interval"))
+                    )
+                    .repeatForever();
+            Trigger trigger = newTrigger()
+                    .startNow()
+                    .withSchedule(times)
+                    .build();
+            scheduler.scheduleJob(job, trigger);
+            Thread.sleep(10000);
+            scheduler.shutdown();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (SchedulerException e) {
             e.printStackTrace();
         }
     }
