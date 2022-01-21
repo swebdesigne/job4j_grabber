@@ -8,21 +8,21 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 public class SqlRuParse {
-    private int page = 0;
+    private static final int END = 5;
 
     private void parsePage(String link) throws IOException {
         Document doc = Jsoup.connect(link).get();
-        Elements row = doc.select(".forumTable").select("tr");
-        String next = doc.select(".sort_options tbody tr td").select("a").eq(page++).attr("href");
-        for (Element td : row) {
-            System.out.println(String.format("Name %s, link %s, date %s",
-                    td.child(1).children().text(),
-                    td.child(1).children().attr("href"),
-                    td.child(5).text()
-            ));
-        }
-        if (page < 5) {
-            parsePage(next);
+        Elements next = doc.select(".sort_options tbody tr td").select("a");
+        for (int i = 0; i < END;) {
+            Elements row = doc.select(".forumTable").select("tr");
+            for (Element td : row) {
+                System.out.println(String.format("Name %s, link %s, date %s",
+                        td.child(1).children().text(),
+                        td.child(1).children().attr("href"),
+                        td.child(5).text()
+                ));
+            }
+            doc = Jsoup.connect(next.eq(i++).attr("href")).get();
         }
     }
 
