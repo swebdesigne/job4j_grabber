@@ -15,7 +15,7 @@ public class SqlRuParse {
         Elements row = doc.select(".forumTable").select("tr");
         String next = doc.select(".sort_options tbody tr td").select("a").eq(page++).attr("href");
         for (Element td : row) {
-            System.out.println(String.format("Name %s, link %s, data %s",
+            System.out.println(String.format("Name %s, link %s, date %s",
                     td.child(1).children().text(),
                     td.child(1).children().attr("href"),
                     td.child(5).text()
