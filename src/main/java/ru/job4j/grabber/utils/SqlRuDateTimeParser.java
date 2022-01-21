@@ -3,11 +3,14 @@ package ru.job4j.grabber.utils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 public class SqlRuDateTimeParser implements DateTimeParser {
      private static final String TODAY = "сегодня";
      private static final String YESTERDAY = "вчера";
+     private static final String FORMATTER = "yy";
      private static final Map<String, String> MONTHS = Map.ofEntries(
              Map.entry("янв", "01"),
              Map.entry("фев", "02"),
@@ -30,25 +33,23 @@ public class SqlRuDateTimeParser implements DateTimeParser {
         String[] date = data[0].replace(",", "").split(" ");
         String[] time = data[1].split(":");
         LocalDateTime localDateTime;
+        LocalTime localTime = LocalTime.of(
+                Integer.parseInt(time[0]),
+                Integer.parseInt(time[1])
+        );
         switch (date[0]) {
             case TODAY : localDateTime = LocalDateTime.of(
                     today,
-                    LocalTime.of(
-                            Integer.parseInt(time[0]),
-                            Integer.parseInt(time[1])
-                    )
+                    localTime
             );
             break;
             case YESTERDAY : localDateTime = LocalDateTime.of(
-                    LocalDate.now().getYear(),
-                    today.minusDays(1).getMonth(),
-                    LocalDate.now().getDayOfMonth() - 1,
-                    Integer.parseInt(time[0]),
-                    Integer.parseInt(time[1])
+                    today.minusDays(1),
+                    localTime
             );
             break;
             default : localDateTime = LocalDateTime.of(
-                    Integer.parseInt(date[2]),
+                    Integer.parseInt(String.valueOf(Year.parse(date[2], DateTimeFormatter.ofPattern(FORMATTER)))),
                     Integer.parseInt(MONTHS.get(date[1])),
                     Integer.parseInt(date[0]),
                     Integer.parseInt(time[0]),
