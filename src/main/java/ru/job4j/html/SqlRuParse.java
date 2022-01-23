@@ -11,18 +11,16 @@ public class SqlRuParse {
     private static final int END = 5;
 
     private void parsePage(String link) throws IOException {
-        Document doc = Jsoup.connect(link).get();
-        Elements next = doc.select(".sort_options tbody tr td").select("a");
-        for (int i = 0; i < END;) {
-            Elements row = doc.select(".forumTable").select("tr");
+        for (int i = 1; i <= END; i++) {
+            Document doc = Jsoup.connect(link + i).get();
+            Elements row = doc.select(".postslisttopic");
             for (Element td : row) {
                 System.out.println(String.format("Name %s, link %s, date %s",
-                        td.child(1).children().text(),
-                        td.child(1).children().attr("href"),
-                        td.child(5).text()
+                        td.child(0).text(),
+                        td.child(0).attr("href"),
+                        td.lastElementSibling().text()
                 ));
             }
-            doc = Jsoup.connect(next.eq(i++).attr("href")).get();
         }
     }
 
