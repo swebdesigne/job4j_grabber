@@ -5,38 +5,63 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ru.job4j.grabber.Post;
+import ru.job4j.grabber.utils.DateTimeParser;
+import ru.job4j.grabber.utils.Parse;
 import ru.job4j.grabber.utils.SqlRuDateTimeParser;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SqlRuParse {
+public class SqlRuParse implements Parse {
     private static final int END = 5;
+    private final DateTimeParser dateTimeParser;
+    private List<Post> posts = new ArrayList<>();
 
-    private void parsePage(String link) throws IOException {
+    public SqlRuParse(DateTimeParser dateTimeParser) {
+        this.dateTimeParser = dateTimeParser;
+    }
+
+    private void parsePage(String link) throws IOException, ParseException {
         for (int i = 1; i <= END; i++) {
             Document doc = Jsoup.connect(link + i).get();
             Elements row = doc.select(".postslisttopic");
             for (Element td : row) {
-                System.out.println(String.format("Name %s, link %s, date %s",
-                        td.child(0).text(),
-                        td.child(0).attr("href"),
-                        td.lastElementSibling().text()
-                ));
+                posts.add(detail(td.child(0).attr("href")));
             }
         }
     }
 
-    private Post loadingPost(String link) throws IOException {
+    @Override
+    public List<Post> list(String link) throws IOException, ParseException {
+        parsePage(link);
+        return posts;
+    }
+
+    @Override
+    public Post detail(String link) throws IOException, ParseException {
         Document doc = Jsoup.connect(link).get();
         String title = doc.select(".messageHeader").eq(0).text().trim();
         String desc = doc.select(".msgBody").eq(1).text();
         String date = doc.select(".msgFooter").eq(0).text().split("\\[")[0].trim();
-        return new Post(title, link, desc, new SqlRuDateTimeParser().parse(date));
+        return new Post(title, link, desc, dateTimeParser.parse(date));
     }
 
-    public static void main(String[] args) throws IOException {
-        SqlRuParse s = new SqlRuParse();
+    public static void main(String[] args) throws IOException, ParseException {
+        SqlRuParse s = new SqlRuParse(new SqlRuDateTimeParser());
         s.parsePage("https://www.sql.ru/forum/job-offers/");
-        s.loadingPost("https://www.sql.ru/forum/1325330/lidy-be-fe-senior-cistemnye-analitiki-qa-i-devops-moskva-do-200t");
+        s.detail("https://www.sql.ru/forum/1325330/lidy-be-fe-senior-cistemnye-analitiki-qa-i-devops-moskva-do-200t");
+        s.list("https://www.sql.ru/forum/job-offers/")
+                .stream().forEach(job -> {
+                    System.out.println(String.format(
+                            "title %s\n link %s, \ndetail %s,\ncreated %s",
+                            job.getTitle(),
+                            job.getLink(),
+                            job.getDescription(),
+                            job.getCreated())
+                    );
+                }
+        );
     }
 }
