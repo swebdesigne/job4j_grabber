@@ -4,6 +4,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ru.job4j.grabber.Post;
+import ru.job4j.grabber.utils.SqlRuDateTimeParser;
 
 import java.io.IOException;
 
@@ -24,11 +26,12 @@ public class SqlRuParse {
         }
     }
 
-    private String[] loadingPost(String link) throws IOException {
+    private Post loadingPost(String link) throws IOException {
         Document doc = Jsoup.connect(link).get();
+        String title = doc.select(".messageHeader").eq(0).text().trim();
         String desc = doc.select(".msgBody").eq(1).text();
         String date = doc.select(".msgFooter").eq(0).text().split("\\[")[0].trim();
-        return new String[] {desc, date};
+        return new Post(title, link, desc, new SqlRuDateTimeParser().parse(date));
     }
 
     public static void main(String[] args) throws IOException {
