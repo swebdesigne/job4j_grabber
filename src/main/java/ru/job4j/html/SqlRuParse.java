@@ -47,21 +47,4 @@ public class SqlRuParse implements Parse {
         String date = doc.select(".msgFooter").eq(0).text().split("\\[")[0].trim();
         return new Post(title, link, desc, dateTimeParser.parse(date));
     }
-
-    public static void main(String[] args) throws IOException, ParseException {
-        SqlRuParse s = new SqlRuParse(new SqlRuDateTimeParser());
-        s.parsePage("https://www.sql.ru/forum/job-offers/");
-        s.detail("https://www.sql.ru/forum/1325330/lidy-be-fe-senior-cistemnye-analitiki-qa-i-devops-moskva-do-200t");
-        s.list("https://www.sql.ru/forum/job-offers/")
-                .stream().forEach(job -> {
-                    System.out.println(String.format(
-                            "title %s\n link %s, \ndetail %s,\ncreated %s",
-                            job.getTitle(),
-                            job.getLink(),
-                            job.getDescription(),
-                            job.getCreated())
-                    );
-                }
-        );
-    }
 }
