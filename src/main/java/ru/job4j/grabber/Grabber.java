@@ -70,8 +70,9 @@ public class Grabber implements Grab {
                         .stream()
                         .filter(title -> {
                             boolean res = false;
-                            if (title.getTitle().toLowerCase().contains(keyWord)
-                                    && !title.getTitle().toLowerCase().contains(exceptionKeyWord)) {
+                            String name = title.getTitle().toLowerCase();
+                            if (name.contains(keyWord)
+                                    && !name.contains(exceptionKeyWord)) {
                                 res = true;
                             }
                             return res;
