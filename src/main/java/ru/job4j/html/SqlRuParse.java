@@ -17,6 +17,8 @@ public class SqlRuParse implements Parse {
     private static final int END = 5;
     private final DateTimeParser dateTimeParser;
     private List<Post> posts = new ArrayList<>();
+    private final String keyWord = "java";
+    private final String exceptionKeyWord = "javascript";
 
     public SqlRuParse(DateTimeParser dateTimeParser) {
         this.dateTimeParser = dateTimeParser;
@@ -27,7 +29,11 @@ public class SqlRuParse implements Parse {
             Document doc = Jsoup.connect(link + i).get();
             Elements row = doc.select(".postslisttopic");
             for (Element td : row) {
-                posts.add(detail(td.child(0).attr("href")));
+                Post post = detail(td.child(0).attr("href"));
+                String title = post.getTitle().toLowerCase();
+                if (title.contains(keyWord) && !title.toLowerCase().contains(exceptionKeyWord)) {
+                    posts.add(post);
+                }
             }
         }
     }
