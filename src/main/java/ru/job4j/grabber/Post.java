@@ -88,13 +88,12 @@ public class Post {
 
     @Override
     public String toString() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy, HH:mm");
         return "Post{"
-                + "id=" + id
-                + ", title='" + title
-                + ", link='" + link
-                + ", description='" + description
-                + ", created=" + formatter.format(created)
-                + '}';
+                + "\n\tid=" + id
+                + "\n\ttitle='" + title
+                + "\n\tlink='" + link
+                + "\n\tdescription='" + description
+                + "\n\tcreated=" + created.toString().replace("T", " ")
+                + "\n}";
     }
 }
