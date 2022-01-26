@@ -1,6 +1,5 @@
 package ru.job4j.grabber;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
