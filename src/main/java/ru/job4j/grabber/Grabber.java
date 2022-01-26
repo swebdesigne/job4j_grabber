@@ -57,6 +57,8 @@ public class Grabber implements Grab {
     }
 
     public static class GrabJob implements Job {
+        private final String keyWord = "java";
+        private final String exceptionKeyWord = "javascript";
 
         @Override
         public void execute(JobExecutionContext context) {
@@ -65,7 +67,16 @@ public class Grabber implements Grab {
             Parse parse = (Parse) map.get("parse");
             try {
                 parse.list("https://www.sql.ru/forum/job-offers/")
-                        .stream().forEach(post -> store.save(post));
+                        .stream()
+                        .filter(title -> {
+                            boolean res = false;
+                            if (title.getTitle().toLowerCase().contains(keyWord)
+                                    && !title.getTitle().toLowerCase().contains(exceptionKeyWord)) {
+                                res = true;
+                            }
+                            return res;
+                        })
+                        .forEach(post -> store.save(post));
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ParseException e) {
