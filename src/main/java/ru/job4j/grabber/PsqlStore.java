@@ -14,6 +14,8 @@ import java.util.Properties;
 
 public class PsqlStore implements Store, AutoCloseable {
     private Connection cn;
+    private final String keyWord = "java";
+    private final String exceptionKeyWord = "javascript";
 
     public PsqlStore(Properties cfg) throws SQLException {
             try {
@@ -56,7 +58,10 @@ public class PsqlStore implements Store, AutoCloseable {
             statement.setString(2, post.getDescription());
             statement.setString(3, post.getLink());
             statement.setTimestamp(4, Timestamp.valueOf(post.getCreated()));
-            statement.execute();
+            String name = post.getTitle().toLowerCase();
+            if (name.contains(keyWord) && !name.contains(exceptionKeyWord)) {
+                statement.execute();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

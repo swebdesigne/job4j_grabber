@@ -20,6 +20,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 
 public class Grabber implements Grab {
     private final Properties cfg = new Properties();
+    private final String keyWord = "java";
 
     public Store store() throws SQLException {
         return new PsqlStore(this.cfg);
@@ -57,8 +58,6 @@ public class Grabber implements Grab {
     }
 
     public static class GrabJob implements Job {
-        private final String keyWord = "java";
-        private final String exceptionKeyWord = "javascript";
 
         @Override
         public void execute(JobExecutionContext context) {
@@ -67,17 +66,7 @@ public class Grabber implements Grab {
             Parse parse = (Parse) map.get("parse");
             try {
                 parse.list("https://www.sql.ru/forum/job-offers/")
-                        .stream()
-                        .filter(title -> {
-                            boolean res = false;
-                            String name = title.getTitle().toLowerCase();
-                            if (name.contains(keyWord)
-                                    && !name.contains(exceptionKeyWord)) {
-                                res = true;
-                            }
-                            return res;
-                        })
-                        .forEach(post -> store.save(post));
+                        .stream().forEach(post -> store.save(post));
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ParseException e) {
