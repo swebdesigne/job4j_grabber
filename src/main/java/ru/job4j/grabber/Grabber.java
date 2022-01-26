@@ -20,7 +20,6 @@ import static org.quartz.TriggerBuilder.newTrigger;
 
 public class Grabber implements Grab {
     private final Properties cfg = new Properties();
-    private final String keyWord = "java";
 
     public Store store() throws SQLException {
         return new PsqlStore(this.cfg);
