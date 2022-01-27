@@ -37,10 +37,10 @@ insert into person (id, name, company_id) values (11, 'Pasha', 7);
 
 
 -- имена всех person, которые не состоят в компании с id = 5;
-select * from person where company_id in (select id from company where id <> 5);
-
 -- название компании для каждого человека
-select p.name, c.name from person as p inner join company as c on p.company_id = c.id;
+select p.name as person, c.name as company, c.id as id_company
+from person as p inner join company as c on p.company_id = c.id where c.id <> 5;
+
 
 -- Необходимо выбрать название компании с максимальным количеством человек + количество человек в этой компании
 select c.name, count(p.id) as count_person from company as c
