@@ -1,5 +1,23 @@
 package ru.job4j.gc;
 
+/**
+ * Заголовок - 12b (64 битная система)
+ * int - 4b
+ * String:
+ *  char[] - 4b (ссылка)
+ *  coder (byte) - 1b
+ *  hash (int) - 4b
+ * 12 + 4 + 1 + 4 = 21 и делаем выравнивание для кратности + 3 = 24
+ * итого: вес 3х объктов составляет 72 байта (24 * 3)
+ *
+ * Вызов Garbage collector
+ * параметр -Xmx16m
+ *
+ * в цикле создаем объекты User
+ * когда heap заполнен (16Mb), а именно old generation, то происходит major GC, который очищает память
+ *
+ */
+
 public class User {
     private int age;
     private String name;
@@ -15,20 +33,6 @@ public class User {
         System.out.printf("Removed %d %s%n", age, name);
     }
 
-    /**
-     * Заголовок - 12b (64 битная система)
-     * int - 4b
-     * String:
-     *  char[] - 4b (ссылка)
-     *  coder (byte) - 1b
-     *  hash (int) - 4b
-     * 12 + 4 + 1 + 4 = 21 и делаем выравнивание для кратности + 3 = 24
-     * итого: вес 3х объктов составляет 72 байта (24 * 3)
-     *
-     * 
-     * параметр -Xmx16m
-     * @param args
-    */
     public static void main(String[] args) {
         User user1 = new User(34, "Igor");
         User user2 = new User(35, "Boris");
