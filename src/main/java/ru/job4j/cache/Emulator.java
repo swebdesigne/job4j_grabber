@@ -1,16 +1,25 @@
 package ru.job4j.cache;
 
 public class Emulator {
-    /**
-     *
-     * @param args - Names.txt Address.txt
-     */
+    private final DirFileCache dir;
+
+    public Emulator(String dirFileCache) {
+        dir = new DirFileCache(dirFileCache);
+    }
+
+    public void load(String key) {
+        dir.load(key);
+    }
+
+    public String getData(String key) {
+        return dir.get(key);
+    }
+
     public static void main(String[] args) {
-        String dir = args[1];
-        DirFileCache fileCache = new DirFileCache(dir);
-        if (fileCache.get(dir) == null) {
-            System.out.println(fileCache.load(dir));
-        }
-        System.out.println(fileCache.get(dir));
+        Emulator emulator = new Emulator("D:\\");
+        emulator.load("test.txt");
+        String data = emulator.getData("test.txt");
+        System.out.println(data);
+
     }
 }
