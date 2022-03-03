@@ -4,29 +4,25 @@ import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 
 public class SoftRef {
-    private void softRef() throws InterruptedException {
-        String name = "Igor";
+    private void softRef(String name) {
         SoftReference<String> nameRef = new SoftReference<>(name);
-        name = null;
-        System.gc();
-        if (nameRef.get() != null) {
-            System.out.println(nameRef.get());
+        Object getName = nameRef.get();
+        if (getName != null) {
+            System.out.println(getName);
         }
     }
 
-    private void weakRef() throws InterruptedException {
-        String name = "Igor";
+    private void weakRef(String name) {
         WeakReference nameRef = new WeakReference(name);
-        name = null;
-        System.gc();
-        if (nameRef.get() != null) {
-            System.out.println(nameRef.get());
+        Object getName = nameRef.get();
+        if (getName != null) {
+            System.out.println(getName);
         }
     }
 
     public static void main(String[] args) throws InterruptedException {
         SoftRef ref = new SoftRef();
-        ref.softRef();
-        ref.weakRef();
+        ref.softRef("Igor");
+        ref.weakRef("Igor");
     }
 }
