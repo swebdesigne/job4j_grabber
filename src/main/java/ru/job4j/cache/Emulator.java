@@ -1,5 +1,7 @@
 package ru.job4j.cache;
 
+import java.util.Scanner;
+
 public class Emulator {
     private final DirFileCache dir;
 
@@ -16,10 +18,10 @@ public class Emulator {
     }
 
     public static void main(String[] args) {
-        Emulator emulator = new Emulator("D:\\");
-        emulator.load("test.txt");
-        String data = emulator.getData("test.txt");
+        System.out.println("Please to point the direction:");
+        Emulator emulator = new Emulator(new Scanner(System.in).nextLine());
+        System.out.println("Please to point the file:");
+        String data = emulator.getData(new Scanner(System.in).nextLine());
         System.out.println(data);
-
     }
 }
